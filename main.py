@@ -40,7 +40,7 @@ app = FastAPI(
     description="AI-based health risk prediction API",
     version="1.0.0"
 )
-
+app.include_router(auth_router)
 
 # --------------------------------------------------------------
 # STARTUP
