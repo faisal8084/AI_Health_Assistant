@@ -1,0 +1,240 @@
+/* ============================================================
+   AUTH PAGES (login / register)
+   Reuses design tokens + .btn/.card/.field styles from
+   base.css and components.css.
+   ============================================================ */
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+@media (max-width: 900px) {
+  .auth-shell { grid-template-columns: 1fr; }
+}
+
+/* ---- left: branding / visual panel ---- */
+.auth-visual {
+  position: relative;
+  background: var(--gradient-brand);
+  color: var(--on-brand);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 44px 48px;
+  overflow: hidden;
+}
+
+/* Kept after the base .auth-visual rule so the mobile layout wins in
+   the cascade and the decorative panel does not consume small screens. */
+@media (max-width: 900px) {
+  .auth-visual { display: none; }
+}
+
+.auth-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(480px 320px at 90% 10%, rgba(255,255,255,0.14), transparent 60%),
+    radial-gradient(420px 320px at 0% 100%, rgba(255,255,255,0.10), transparent 60%);
+  pointer-events: none;
+}
+
+.auth-visual .brand {
+  color: var(--on-brand);
+  position: relative;
+  z-index: 1;
+}
+.auth-visual .brand-mark { background: var(--on-brand-wash); color: var(--on-brand); }
+
+.auth-visual .pitch {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+}
+.auth-visual .pitch h1 {
+  color: var(--on-brand);
+  font-size: clamp(1.7rem, 2.4vw, 2.3rem);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.auth-visual .pitch p {
+  color: var(--on-brand-soft);
+}
+
+.auth-visual .pitch-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 28px;
+  margin-top: 32px;
+}
+.auth-visual .pitch-stats div .num { font-family: var(--font-mono); font-size: 1.3rem; font-weight: 600; color: var(--on-brand); }
+.auth-visual .pitch-stats div .label { font-size: 0.78rem; color: var(--on-brand-faint); }
+
+.auth-visual .foot-note {
+  position: relative;
+  z-index: 1;
+  font-size: 0.8rem;
+  color: var(--on-brand-faint);
+}
+
+/* ---- right: form panel ---- */
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: transparent;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 38px 34px;
+}
+html[data-theme="dark"] .auth-card {
+  box-shadow: var(--shadow-3d), 0 0 60px -28px rgba(47, 230, 209, 0.25);
+}
+
+.auth-card .brand {
+  display: none;
+  margin-bottom: 22px;
+}
+@media (max-width: 900px) {
+  .auth-card .brand { display: inline-flex; }
+}
+
+.auth-card h2 {
+  font-size: 1.55rem;
+  margin-bottom: 6px;
+}
+.auth-card > p.sub {
+  margin-bottom: 26px;
+}
+
+.auth-form .field { margin-bottom: 16px; }
+
+.password-field {
+  position: relative;
+}
+.password-field input {
+  padding-right: 42px !important;
+}
+.password-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  padding: 6px;
+  display: flex;
+  border-radius: 8px;
+}
+.password-toggle:hover { color: var(--primary); background: var(--primary-light); }
+
+/* strength meter */
+.strength-meter {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+}
+.strength-meter .bar {
+  height: 4px;
+  flex: 1;
+  border-radius: 3px;
+  background: var(--border-strong);
+  transition: background var(--fast) var(--ease);
+}
+.strength-label {
+  font-size: 0.76rem;
+  margin-top: 6px;
+  color: var(--ink-faint);
+}
+.strength-1 .bar:nth-child(1) { background: var(--risk-high); }
+.strength-2 .bar:nth-child(-n+2) { background: var(--risk-moderate); }
+.strength-3 .bar:nth-child(-n+3) { background: var(--primary); }
+.strength-4 .bar { background: var(--risk-low); }
+
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0 22px;
+  font-size: 0.85rem;
+}
+.auth-links a { color: var(--primary); font-weight: 600; }
+.auth-links a:hover { text-decoration: underline; }
+
+.auth-switch {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.auth-switch a { color: var(--primary); font-weight: 600; }
+.auth-switch a:hover { text-decoration: underline; }
+
+/* alert banner (error / success) inside the form */
+.auth-alert {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  font-size: 0.86rem;
+  margin-bottom: 18px;
+}
+.auth-alert.show { display: flex; }
+.auth-alert.error { background: var(--risk-high-bg); color: var(--risk-high); }
+.auth-alert.success { background: var(--risk-low-bg); color: var(--risk-low); }
+
+/* spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn .spinner { margin-right: 8px; vertical-align: -2px; }
+
+/* email/password inputs share the same base style as text inputs */
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.92rem;
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+input[type="email"].invalid,
+input[type="password"].invalid {
+  border-color: var(--risk-high);
+  box-shadow: 0 0 0 4px var(--risk-high-bg);
+}
+
+.auth-theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 2;
+}

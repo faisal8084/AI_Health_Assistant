@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Health Assistant Faisal</title> 
+<link rel="icon" type="image/png" href="drugs.png">
+<meta name="description" content="AI-powered diabetes, heart disease and treatment-need risk assessment with a conversational health assistant." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles/base.css?v=20260829" />
+<link rel="stylesheet" href="styles/components.css?v=20260829" />
+<script>
+  // Applied before first paint so there's no flash of the wrong theme.
+  (function () {
+    try {
+      var saved = localStorage.getItem('ahs_theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- floating aurora blobs behind everything, dark-mode only -->
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="site-header glass">
+  <div class="container">
+    <button class="brand" type="button" data-nav="home" aria-label="AI Health Assistant home">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h4l2-7 4 14 2-9 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      AI Health Assistant
+    </button>
+
+    <nav class="main-nav" aria-label="Primary">
+      <button type="button" class="nav-link" data-nav="home">Home</button>
+      <button type="button" class="nav-link" data-nav="check">Health Check</button>
+      <button type="button" class="nav-link" data-nav="chat">AI Chat</button>
+      <button type="button" class="nav-link" data-nav="dashboard">Dashboard</button>
+      <button type="button" class="nav-link" data-nav="about">About</button>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <span class="knob">
+          <svg viewBox="0 0 24 24" fill="none" id="themeIcon"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36A5.4 5.4 0 0112 3z" fill="currentColor"/></svg>
+        </span>
+      </button>
+      <button class="icon-btn" id="settingsBtn" title="Connection settings" aria-label="Settings" >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <button class="btn btn-secondary btn-sm" id="logoutBtn">Log out</button>
+      <button class="btn btn-primary btn-sm" data-nav="check">Start Health Check</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button type="button" class="nav-link" data-nav="home">Home</button>
+  <button type="button" class="nav-link" data-nav="check">Health Check</button>
+  <button type="button" class="nav-link" data-nav="chat">AI Chat</button>
+  <button type="button" class="nav-link" data-nav="dashboard">Dashboard</button>
+  <button type="button" class="nav-link" data-nav="about">About</button>
+</div>
+
+<main id="main-content" tabindex="-1">
+
+<!-- ============================================================
+     HOME VIEW
+     ============================================================ -->
+<section class="view active" id="view-home">
+
+  <section class="hero">
+    <div class="container">
+      <div class="slide-up">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> AI-Powered Health Insights</div>
+        <h1>Your <span class="grad">Intelligent Health</span> Companion</h1>
+        <p class="lead">Understand your health, monitor your risks, and get personalized guidance with AI-powered health insights across diabetes, heart health, and treatment needs.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" data-nav="check">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+            Start Health Check
+          </button>
+          <button class="btn btn-secondary" data-nav="chat">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.5 8.5 0 01-8.5 8.5 8.4 8.4 0 01-3.9-.95L3 20l1.1-4.15A8.4 8.4 0 013.5 12 8.5 8.5 0 0112 3.5a8.5 8.5 0 019 8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Chat with AI
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="num">3</div><div class="label">Risk Models</div></div>
+          <div class="hero-stat"><div class="num">~2 min</div><div class="label">Per Assessment</div></div>
+          <div class="hero-stat"><div class="num">24/7</div><div class="label">AI Assistant</div></div>
+        </div>
+      </div>
+
+      <div class="hero-visual pop-in">
+        <svg viewBox="0 0 420 420" width="100%" height="100%">
+          <defs>
+            <linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0e7c7b"/>
+              <stop offset="100%" stop-color="#2f5fed"/>
+            </linearGradient>
+          </defs>
+          <circle cx="210" cy="210" r="180" fill="url(#hgrad)" opacity="0.07"/>
+          <circle cx="210" cy="210" r="140" fill="none" stroke="url(#hgrad)" stroke-width="1.4" stroke-dasharray="4 6" opacity="0.4"/>
+          <circle cx="210" cy="210" r="128" fill="#ffffff" opacity="0.7"/>
+          <path d="M70 214 h48 l14 -38 22 82 20 -120 16 76 12 -30 h48" fill="none" stroke="url(#hgrad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="900" stroke-dashoffset="900" style="animation: heartbeatDraw 2.4s ease-out forwards;"/>
+          <g class="orbit-dot" style="animation-delay:0s">
+            <circle cx="330" cy="130" r="26" fill="#fff" stroke="var(--border-strong)"/>
+            <text x="330" y="136" text-anchor="middle" font-size="20">❤️</text>
+          </g>
+          <g class="orbit-dot" style="animation-delay:0.6s">
+            <circle cx="88" cy="120" r="24" fill="#fff" stroke="var(--border-strong)"/>
+            <text x="88" y="127" text-anchor="middle" font-size="18">🩸</text>
+          </g>
+          <g class="orbit-dot" style="animation-delay:1.2s">
+            <circle cx="100" cy="320" r="24" fill="#fff" stroke="var(--border-strong)"/>
+            <text x="100" y="327" text-anchor="middle" font-size="18">💊</text>
+          </g>
+          <g class="orbit-dot" style="animation-delay:0.3s">
+            <circle cx="340" cy="300" r="22" fill="#fff" stroke="var(--border-strong)"/>
+            <text x="340" y="306" text-anchor="middle" font-size="16">📊</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Three focused risk assessments</h2>
+        <p>Each assessment uses a dedicated, trained model — built on the exact clinical and lifestyle inputs it was trained on.</p>
+      </div>
+      <div class="grid-3 stagger">
+        <button type="button" class="card card-hover tilt3d condition-card" data-nav="check" data-condition="diabetes">
+          <div class="condition-icon icon-teal">🩸</div>
+          <h3>Diabetes Risk</h3>
+          <p>Estimates diabetes risk from glucose, HbA1c, BMI and lifestyle factors.</p>
+          <div class="go">Start assessment →</div>
+        </button>
+        <button type="button" class="card card-hover tilt3d condition-card" data-nav="check" data-condition="heart">
+          <div class="condition-icon icon-blue">❤️</div>
+          <h3>Heart Disease Risk</h3>
+          <p>Evaluates cardiac risk using vitals like blood pressure, cholesterol and ECG readings.</p>
+          <div class="go">Start assessment →</div>
+        </button>
+        <button type="button" class="card card-hover tilt3d condition-card" data-nav="check" data-condition="treatment">
+          <div class="condition-icon icon-amber">💊</div>
+          <h3>Treatment-Need Assessment</h3>
+          <p>Gauges whether workplace mental-health treatment may be indicated.</p>
+          <div class="go">Start assessment →</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="card glass" style="padding:36px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+        <div style="max-width:520px;">
+          <h2 style="font-size:1.4rem; margin-bottom:8px;">Prefer to just talk it through?</h2>
+          <p>Chat with the AI Health Assistant — it will ask you a few guided questions and run the right model for you automatically.</p>
+        </div>
+        <button class="btn btn-primary" data-nav="chat">Open AI Chat</button>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================
+     HEALTH CHECK VIEW
+     ============================================================ -->
+<section class="view" id="view-check">
+  <div class="container section">
+    <div class="section-head left">
+      <h2>Health Check</h2>
+      <p>Choose an assessment below. Fields map exactly to what each trained model expects.</p>
+    </div>
+
+    <div class="check-tabs" role="tablist" aria-label="Assessment type">
+      <button class="check-tab active" data-condition="diabetes" role="tab" aria-selected="true">Diabetes</button>
+      <button class="check-tab" data-condition="heart" role="tab" aria-selected="false">Heart Disease</button>
+      <button class="check-tab" data-condition="treatment" role="tab" aria-selected="false">Treatment Need</button>
+    </div>
+
+    <div class="check-layout">
+      <div class="card form-card" id="formCard">
+        <!-- injected by app.js: form-progress + field-grid + form-footer -->
+      </div>
+
+      <aside class="card info-panel" id="infoPanel">
+        <!-- injected by app.js -->
+      </aside>
+    </div>
+
+    <!-- analyzing loading state -->
+    <div class="card" id="analyzingCard" style="display:none;" role="status" aria-live="polite" aria-busy="true">
+      <div class="analyzing">
+        <div class="pulse-ring-wrap">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-9 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Analyzing your health…</h3>
+        <p>Running your data through the trained model.</p>
+        <div class="analyzing-steps" id="analyzingSteps">Validating inputs…</div>
+      </div>
+    </div>
+
+    <!-- result -->
+    <div id="resultMount"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CHAT VIEW
+     ============================================================ -->
+<section class="view" id="view-chat">
+  <div class="container section">
+    <div class="section-head left">
+      <h2>AI Health Assistant</h2>
+      <p>Tell it what you'd like to check — it will ask guided follow-up questions and return a full assessment.</p>
+    </div>
+
+    <div class="chat-shell">
+      <aside class="card chat-side">
+        <div>
+          <h4>Suggested</h4>
+          <div class="suggested-list" id="suggestedList">
+            <button class="suggested-chip">Check my diabetes risk</button>
+            <button class="suggested-chip">I want to check my heart health</button>
+            <button class="suggested-chip">I'm stressed at work, do I need treatment support?</button>
+            <button class="suggested-chip">cancel</button>
+          </div>
+        </div>
+        <div>
+          <h4>Session</h4>
+          <button class="btn btn-secondary btn-sm btn-block" id="clearChatBtn">Clear chat</button>
+        </div>
+      </aside>
+
+      <div class="card chat-main">
+        <div class="chat-header">
+          <div class="who">
+            <div class="chat-avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-9 2 2h4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:600; font-size:0.92rem;">AI Health Assistant</div>
+              <div class="chat-status"><span class="dot"></span> Online</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages" aria-live="polite" aria-label="Conversation"></div>
+
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Type a message… e.g. 'check my diabetes risk'" autocomplete="off" />
+          <button class="send-btn" id="chatSendBtn" aria-label="Send">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M22 2l-7 20-4-9-9-4 20-7z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DASHBOARD VIEW
+     ============================================================ -->
+<section class="view" id="view-dashboard">
+  <div class="container section">
+    <div class="section-head left">
+      <h2>Health Dashboard</h2>
+      <p>A snapshot built from the assessments you've completed on this device.</p>
+    </div>
+
+    <div id="dashboardMount"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT VIEW
+     ============================================================ -->
+<section class="view" id="view-about">
+  <div class="container section">
+    <div class="section-head">
+      <h2>About AI Health Assistant</h2>
+      <p>Informational risk insights powered by trained machine-learning models — built to help you understand patterns, not to replace your doctor.</p>
+    </div>
+
+    <div class="about-grid stagger">
+      <div class="card about-card tilt3d">
+        <h4>🩸 Diabetes Model</h4>
+        <p>An XGBoost classifier trained on demographic, metabolic and lifestyle indicators such as HbA1c and blood glucose level.</p>
+      </div>
+      <div class="card about-card tilt3d">
+        <h4>❤️ Heart Disease Model</h4>
+        <p>An XGBoost classifier trained on clinical vitals including blood pressure, cholesterol, ECG and exercise response.</p>
+      </div>
+      <div class="card about-card tilt3d">
+        <h4>💊 Treatment-Need Model</h4>
+        <p>A classifier trained on workplace and mental-health survey data to gauge whether treatment may be indicated.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:28px; padding:28px;">
+      <div class="medical-disclaimer" style="margin-top:0;">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span>This AI Health Assistant provides informational insights and is not a substitute for professional medical diagnosis or treatment. Always consult a qualified healthcare professional about your health.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="brand" style="font-size:0.92rem;">
+      <span class="brand-mark" style="width:28px;height:28px;border-radius:8px;">
+        <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M3 12h4l2-7 4 14 2-9 2 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      AI Health Assistant
+    </div>
+    <p>Informational insights only — not a medical diagnosis.</p>
+  </div>
+</footer>
+
+<div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ============================================================
+     SETTINGS MODAL (API base URL)
+     ============================================================ -->
+<div id="settingsModal" style="display:none; position:fixed; inset:0; background:rgba(11,36,38,0.45); z-index:500; align-items:center; justify-content:center; padding:20px;" role="presentation">
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" style="max-width:420px; width:100%; padding:26px;">
+    <h3 id="settingsTitle" style="margin-bottom:6px;">Connection settings</h3>
+    <p style="margin-bottom:16px;">Point the app at your running FastAPI backend.</p>
+    <div class="field">
+      <label for="apiBaseInput">Backend API URL</label>
+      <input type="text" id="apiBaseInput" placeholder="http://127.0.0.1:8000" />
+    </div>
+    <div style="display:flex; gap:10px; margin-top:18px;">
+      <button class="btn btn-secondary btn-block" id="settingsCloseBtn">Cancel</button>
+      <button class="btn btn-primary btn-block" id="settingsSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/theme.js"></script>
+<script src="scripts/api.js"></script>
+<script src="scripts/auth-guard.js"></script>
+<script src="scripts/forms.js"></script>
+<script src="scripts/chat.js"></script>
+<script src="scripts/dashboard.js"></script>
+<script src="scripts/app.js"></script>
+</body>
+</html>

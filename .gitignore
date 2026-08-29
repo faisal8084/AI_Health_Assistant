@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+
+venv/
+.venv/
+
+.env
+
+.agents/
+
+.vscode/
+
+.ipynb_checkpoints/
+
+FRONTEND_UPGRADE.md
