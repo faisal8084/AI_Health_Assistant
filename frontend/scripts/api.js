@@ -39,7 +39,7 @@ const Auth = {
 };
 
 const API = {
-  base: Store.get('ahs_api_base', 'http://127.0.0.1:8000'),
+  base: Store.get('ahs_api_base', 'https://ai-health-assistant-j1mk.onrender.com/'),
 
   setBase(url) {
     this.base = url.replace(/\/+$/, '');
